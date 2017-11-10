@@ -1,7 +1,14 @@
 #import <Cordova/CDV.h>
+#import <CoreTelephony/CTCallCenter.h>
+#import <CoreTelephony/CTCall.h>
 
-@interface PhoneCallInterruption : CDVPlugin
+@interface PhoneCallInterruption : CDVPlugin {
+    NSString *successCallbackID;
+    CDVPluginResult *plresult;
+}
 
-- (void) greet:(CDVInvokedUrlCommand*)command;
+@property (nonatomic, strong) CTCallCenter *objCallCenter;
+
+- (void) addListener:(CDVInvokedUrlCommand*)command;
 
 @end
