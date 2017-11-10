@@ -1,5 +1,5 @@
 {
-    "name": "cordova-plugin-call-interruptionr",
+    "name": "cordova-plugin-call-interruption",
     "version": "0.0.1",
     "cordova": {
       "id": "cordova-plugin-call-interruption",
@@ -12,6 +12,9 @@
     "repository": "https://github.com/WinGood/cordova-plugin-call-interruption",
     "issue": "https://github.com/WinGood/cordova-plugin-call-interruption/issues",
     "keywords": [
+      "ecosystem:cordova",
+      "cordova-android",
+      "cordova-ios",
       "cordova"
     ]
   }
