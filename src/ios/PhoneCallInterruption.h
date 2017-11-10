@@ -9,6 +9,6 @@
 
 @property (nonatomic, strong) CTCallCenter *objCallCenter;
 
-- (void) addListener:(CDVInvokedUrlCommand*)command;
+- (void) onCalling:(CDVInvokedUrlCommand*)command;
 
 @end

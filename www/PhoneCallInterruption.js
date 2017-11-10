@@ -1,9 +1,9 @@
 /*global cordova, module*/
 
 module.exports = {
-  addListener: function(successCallback, errorCallback) {
+  onCalling: function(successCallback, errorCallback) {
     var errorCallback = errorCallback || function() {};
-    cordova.exec(successCallback, errorCallback, 'PhoneCallInterruption', 'addListener');
+    cordova.exec(successCallback, errorCallback, 'PhoneCallInterruption', 'onCalling');
   }
 };
   

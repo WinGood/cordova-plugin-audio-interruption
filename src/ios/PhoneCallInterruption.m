@@ -6,7 +6,7 @@
 
 - (void)pluginInitialize
 {
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(CallStateDidChange:) name:@"CTCallStateDidChange" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(callStateDidChange:) name:@"CTCallStateDidChange" object:nil];
     
     self.objCallCenter = [[CTCallCenter alloc] init];
     self.objCallCenter.callEventHandler = ^(CTCall* call) {
@@ -16,54 +16,43 @@
     };
 }
 
-- (void)addListener:(CDVInvokedUrlCommand*)command
+- (void)onCalling:(CDVInvokedUrlCommand*)command
 {
-    NSString* msg = [NSString stringWithFormat: @"Hello"];
-
     successCallbackID = command.callbackId;
-    
-    [self sendDataToJS:@{@"status": msg}];
 }
 
 
 // Send any data back to JS env through subscribe callback
-- (void) sendDataToJS: (NSDictionary*) dict {
-    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dict options: 0 error: nil];
-    NSString *jsonString = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
-    
-    plresult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:jsonString];
+- (void) sendStatusNameInJS: (NSString*) status {
+    plresult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:status];
     [plresult setKeepCallbackAsBool:YES];
     [self.commandDelegate sendPluginResult:plresult callbackId:successCallbackID];
 }
 
-- (void)CallStateDidChange:(NSNotification *)notification
+- (void) callStateDidChange:(NSNotification *)notification
 {
-    NSLog(@"Notification : %@", notification);
     NSString *callInfo = [[notification userInfo] objectForKey:@"callState"];
     
-    if([callInfo isEqualToString: CTCallStateDialing])
-    {
-        //The call state, before connection is established, when the user initiates the call.
-        NSLog(@"Call is dailing");
-    }
-    if([callInfo isEqualToString: CTCallStateIncoming])
-    {
-        //The call state, before connection is established, when a call is incoming but not yet answered by the user.
-        NSLog(@"Call is Coming");
+    if([callInfo isEqualToString: CTCallStateDialing]) {
+        // The call state, before connection is established, when the user initiates the call.
+        [self sendStatusNameInJS:@"RINGING"];
     }
     
-    if([callInfo isEqualToString: CTCallStateConnected])
-    {
-        //The call state when the call is fully established for all parties involved.
-        NSLog(@"Call Connected");
+    if([callInfo isEqualToString: CTCallStateIncoming]) {
+        // The call state, before connection is established, when a call is incoming but not yet answered by the user.
+        [self sendStatusNameInJS:@"RINGING"];
     }
     
-    if([callInfo isEqualToString: CTCallStateDisconnected])
-    {
-        //The call state Ended.
-        NSLog(@"Call Ended");
+    if([callInfo isEqualToString: CTCallStateConnected]) {
+        // The call state when the call is fully established for all parties involved.
+        [self sendStatusNameInJS:@"OFFHOOK"];
     }
     
+    
+    if([callInfo isEqualToString: CTCallStateDisconnected]) {
+        // The call state ended.
+        [self sendStatusNameInJS:@"IDLE"];
+    }
 }
 
 @end
