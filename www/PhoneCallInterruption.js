@@ -1,9 +1,9 @@
 /*global cordova, module*/
 
 module.exports = {
-  onCalling: function(successCallback, errorCallback) {
+  onCall: function(successCallback, errorCallback) {
     var errorCallback = errorCallback || function() {};
-    cordova.exec(successCallback, errorCallback, 'PhoneCallInterruption', 'onCalling');
+    cordova.exec(successCallback, errorCallback, 'PhoneCallInterruption', 'onCall');
   }
 };
   

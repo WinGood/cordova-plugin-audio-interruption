@@ -16,7 +16,7 @@
     };
 }
 
-- (void)onCalling:(CDVInvokedUrlCommand*)command
+- (void)onCall:(CDVInvokedUrlCommand*)command
 {
     successCallbackID = command.callbackId;
 }
@@ -51,7 +51,7 @@
     
     if([callInfo isEqualToString: CTCallStateDisconnected]) {
         // The call state ended.
-        [self sendStatusNameInJS:@"IDLE"];
+        [self sendStatusNameInJS:@"ENDED"];
     }
 }
 

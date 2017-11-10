@@ -14,7 +14,7 @@ public class PhoneCallInterruption extends CordovaPlugin {
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("onCalling")) {
+        if (action.equals("onCall")) {
             prepareListener();
             listener.setCallbackContext(callbackContext);
             return true;
@@ -34,6 +34,7 @@ public class PhoneCallInterruption extends CordovaPlugin {
 
 class CallStateListener extends PhoneStateListener {
     private CallbackContext callbackContext;
+    private int prevState;
 
     public void setCallbackContext(CallbackContext callbackContext) {
         this.callbackContext = callbackContext;
@@ -48,21 +49,33 @@ class CallStateListener extends PhoneStateListener {
 
         switch (state) {
             case TelephonyManager.CALL_STATE_IDLE:
-            msg = "IDLE";
+                if ((prevState == TelephonyManager.CALL_STATE_OFFHOOK)) {
+                    // A call has now ended
+                    prevState = state;
+                    msg = "ENDED";
+                } else if ((prevState == TelephonyManager.CALL_STATE_RINGING)) {
+                    // Rejected or Missed call
+                    prevState = state;
+                    msg = "ENDED";
+                }
             break;
 
             case TelephonyManager.CALL_STATE_OFFHOOK:
-            msg = "OFFHOOK";
+                msg = "OFFHOOK";
+                prevState = state;
             break;
 
             case TelephonyManager.CALL_STATE_RINGING:
-            msg = "RINGING";
+                msg = "RINGING";
+                prevState = state;
             break;
         }
 
-        PluginResult result = new PluginResult(PluginResult.Status.OK, msg);
-        result.setKeepCallback(true);
+        if(msg != null && !msg.isEmpty()) {
+            PluginResult result = new PluginResult(PluginResult.Status.OK, msg);
+            result.setKeepCallback(true);
 
-        callbackContext.sendPluginResult(result);
+            callbackContext.sendPluginResult(result);
+        }
     }
 }
