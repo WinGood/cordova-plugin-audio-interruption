@@ -1,6 +1,6 @@
 {
     "name": "cordova-plugin-audio-interruption",
-    "version": "0.0.4",
+    "version": "0.1.0",
     "cordova": {
       "id": "cordova-plugin-audio-interruption",
       "platforms": [
