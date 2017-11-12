@@ -1,16 +1,16 @@
 {
-    "name": "cordova-plugin-call-interruption",
-    "version": "0.0.3",
+    "name": "cordova-plugin-audio-interruption",
+    "version": "0.0.1",
     "cordova": {
-      "id": "cordova-plugin-call-interruption",
+      "id": "cordova-plugin-audio-interruption",
       "platforms": [
         "android",
         "ios"
       ]
     },
-    "description": "PhoneCallInterruption plugin",
-    "repository": "https://github.com/WinGood/cordova-plugin-call-interruption",
-    "issue": "https://github.com/WinGood/cordova-plugin-call-interruption/issues",
+    "description": "AudioInterruption plugin",
+    "repository": "https://github.com/WinGood/cordova-plugin-audio-interruption",
+    "issue": "https://github.com/WinGood/cordova-plugin-audio-interruption/issues",
     "keywords": [
       "ecosystem:cordova",
       "cordova-android",

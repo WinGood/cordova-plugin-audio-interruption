@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
-        id="cordova-plugin-call-interruption"
-        version="0.0.3">
+        id="cordova-plugin-audio-interruption"
+        version="0.0.1">
 
-    <name>PhoneCallInterruption</name>
-    <description>PhoneCallInterruption plugin</description>
+    <name>AudioInterruption</name>
+    <description>AudioInterruption plugin</description>
     <license>Apache 2.0</license>
-    <keywords>PhoneCallInterruption</keywords>
+    <keywords>AudioInterruption</keywords>
     <repo>https://github.com/WinGood/cordova-plugin-call-interruption.git</repo>
     <issue>https://github.com/WinGood/cordova-plugin-call-interruption/issues</issue>
 
@@ -14,33 +14,33 @@
         <engine name="cordova" version=">=3.4.0"/>
     </engines>
 
-    <asset src="www/PhoneCallInterruption.js" target="js/PhoneCallInterruption.js"/>
+    <asset src="www/AudioInterruption.js" target="js/AudioInterruption.js"/>
 
-    <js-module src="www/PhoneCallInterruption.js" name="PhoneCallInterruption">
-        <clobbers target="PhoneCallInterruption" />
+    <js-module src="www/AudioInterruption.js" name="AudioInterruption">
+        <clobbers target="AudioInterruption" />
     </js-module>
 
     <!-- android -->
     <platform name="android">
         <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="PhoneCallInterruption">
-                <param name="android-package" value="com.wingood.cordova.callinterruption.PhoneCallInterruption"/>
+            <feature name="AudioInterruption">
+                <param name="android-package" value="com.wingood.cordova.audiointerruption.AudioInterruption"/>
             </feature>
         </config-file>
 
-        <source-file src="src/android/PhoneCallInterruption.java" target-dir="src/com/wingood/cordova/callinterruption/"/>
+        <source-file src="src/android/AudioInterruption.java" target-dir="src/com/wingood/cordova/audiointerruption/"/>
     </platform>
 
     <!-- iOS -->
     <platform name="ios">
         <config-file target="config.xml" parent="/widget">
-            <feature name="PhoneCallInterruption">
-                <param name="ios-package" value="PhoneCallInterruption" />
+            <feature name="AudioInterruption">
+                <param name="ios-package" value="AudioInterruption" />
             </feature>
         </config-file>
 
-        <header-file src="src/ios/PhoneCallInterruption.h" target-dir="PhoneCallInterruptionPlugin"/>
-        <source-file src="src/ios/PhoneCallInterruption.m" target-dir="PhoneCallInterruptionPlugin"/>
+        <header-file src="src/ios/AudioInterruption.h" target-dir="AudioInterruptionPlugin"/>
+        <source-file src="src/ios/AudioInterruption.m" target-dir="AudioInterruptionPlugin"/>
     </platform>
 
 </plugin>
