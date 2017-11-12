@@ -1,15 +1,15 @@
-#import "PhoneCallInterruption.h"
+#import "AudioInterruption.h"
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 
-@implementation PhoneCallInterruption
+@implementation AudioInterruption
 
 - (void) pluginInitialize
 {
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(onAudioSessionEvent:) name:AVAudioSessionInterruptionNotification object:nil];
 }
 
-- (void) onCall:(CDVInvokedUrlCommand*)command
+- (void) addListener:(CDVInvokedUrlCommand*)command
 {
     successCallbackID = command.callbackId;
 }

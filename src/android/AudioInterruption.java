@@ -1,4 +1,4 @@
-package com.wingood.cordova.callinterruption;
+package com.wingood.cordova.audiointerruption;
 
 import org.apache.cordova.*;
 
@@ -9,12 +9,12 @@ import android.telephony.TelephonyManager;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-public class PhoneCallInterruption extends CordovaPlugin {
+public class AudioInterruption extends CordovaPlugin {
     CallStateListener listener;
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
-        if (action.equals("onCall")) {
+        if (action.equals("addListener")) {
             prepareListener();
             listener.setCallbackContext(callbackContext);
             return true;

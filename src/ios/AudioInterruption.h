@@ -2,13 +2,13 @@
 #import <CoreTelephony/CTCallCenter.h>
 #import <CoreTelephony/CTCall.h>
 
-@interface PhoneCallInterruption : CDVPlugin {
+@interface AudioInterruption : CDVPlugin {
     NSString *successCallbackID;
     CDVPluginResult *plresult;
 }
 
 @property (nonatomic, strong) CTCallCenter *objCallCenter;
 
-- (void) onCall:(CDVInvokedUrlCommand*)command;
+- (void) addListener:(CDVInvokedUrlCommand*)command;
 
 @end
