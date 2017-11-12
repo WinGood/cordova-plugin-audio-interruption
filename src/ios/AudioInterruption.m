@@ -1,6 +1,4 @@
 #import "AudioInterruption.h"
-#import <CoreTelephony/CTCallCenter.h>
-#import <CoreTelephony/CTCall.h>
 
 @implementation AudioInterruption
 
@@ -14,7 +12,7 @@
     successCallbackID = command.callbackId;
 }
 
-// Send any data back to JS env through subscribe callback
+// Send status back to JS env through subscribe callback
 - (void) sendStatusNameInJS: (NSString*) status {
     plresult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsString:status];
     [plresult setKeepCallbackAsBool:YES];
@@ -26,9 +24,9 @@
     if ([notification.name isEqualToString:AVAudioSessionInterruptionNotification]) {
         // Check to see if it was a Begin interruption
         if ([[notification.userInfo valueForKey:AVAudioSessionInterruptionTypeKey] isEqualToNumber:[NSNumber numberWithInt:AVAudioSessionInterruptionTypeBegan]]) {
-            [self sendStatusNameInJS:@"RINGING"];
+            [self sendStatusNameInJS:@"INTERRUPTION_BEGIN"];
         } else {
-            [self sendStatusNameInJS:@"ENDED"];
+            [self sendStatusNameInJS:@"INTERRUPTION_ENDED"];
         }
     }
 }
