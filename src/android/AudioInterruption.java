@@ -11,6 +11,7 @@ import org.json.JSONException;
 
 public class AudioInterruption extends CordovaPlugin {
     AudioStateListener listener;
+    CallInterruption listener2;
     AudioManager audioManager;
 
     @Override
@@ -25,13 +26,15 @@ public class AudioInterruption extends CordovaPlugin {
 
     private void prepareListener(CallbackContext callbackContext) {
         if (listener == null) {
-            listener = new AudioStateListener();
-            listener.setCallbackContext(callbackContext);
+            listener2 = new CallInterruption();
+            listener2.setCallbackContext(callbackContext);
+            // listener = new AudioStateListener();
+            // listener.setCallbackContext(callbackContext);
 
-            Context context = this.cordova.getActivity().getApplicationContext();
-            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            // Context context = this.cordova.getActivity().getApplicationContext();
+            // audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             // TODO add error handler
-            audioManager.requestAudioFocus(listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+            // audioManager.requestAudioFocus(listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
         }
     }
 }

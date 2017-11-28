@@ -28,6 +28,22 @@
             </feature>
         </config-file>
 
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <receiver android:name="com.wingood.cordova.audiointerruption.CallInterruption" android:exported="true">
+                <intent-filter android:priority="999">
+                    <action android:name="android.intent.action.PHONE_STATE" />
+                </intent-filter>
+                <intent-filter android:priority="999">
+                    <action android:name="android.intent.action.NEW_OUTGOING_CALL" />
+                </intent-filter>
+            </receiver>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.PROCESS_OUTGOING_CALLS" />
+        </config-file>
+
         <source-file src="src/android/AudioInterruption.java" target-dir="src/com/wingood/cordova/audiointerruption/"/>
     </platform>
 
