@@ -45,6 +45,7 @@
         </config-file>
 
         <source-file src="src/android/AudioInterruption.java" target-dir="src/com/wingood/cordova/audiointerruption/"/>
+        <source-file src="src/android/CallInterruption.java" target-dir="src/com/wingood/cordova/audiointerruption/"/>
     </platform>
 
     <!-- iOS -->
