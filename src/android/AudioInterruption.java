@@ -1,68 +1,102 @@
 package com.wingood.cordova.audiointerruption;
 
 import org.apache.cordova.*;
-
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.AudioManager.OnAudioFocusChangeListener;
+import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyManager;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Date;
+
 public class AudioInterruption extends CordovaPlugin {
-    AudioStateListener listener;
-    AudioManager audioManager;
+    private CallbackContext callbackContext;
+    private Context mContext;
+    private boolean mListenerRegistered = false;
+    private PhoneCallStateListener listener;
 
     @Override
     public boolean execute(String action, JSONArray data, CallbackContext callbackContext) throws JSONException {
         if (action.equals("addListener")) {
-            prepareListener(callbackContext);
+            addListener(callbackContext);
             return true;
         } else {
             return false;
         }
     }
 
-    private void prepareListener(CallbackContext callbackContext) {
-        if (listener == null) {
-            listener = new AudioStateListener();
-            listener.setCallbackContext(callbackContext);
-
+    private void addListener(CallbackContext callbackContext) {
+        if (!mListenerRegistered) {
             Context context = this.cordova.getActivity().getApplicationContext();
-            audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            // TODO add error handler
-            audioManager.requestAudioFocus(listener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+
+            this.callbackContext = callbackContext;
+            this.mContext = context;
+
+            listener = new PhoneCallStateListener();
+            listener.setCallbackContext(this.callbackContext);
+            TelephonyManager telephonyManager = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
+            telephonyManager.listen(listener, PhoneStateListener.LISTEN_CALL_STATE);
+            this.mListenerRegistered = true;
         }
     }
 }
 
-class AudioStateListener implements OnAudioFocusChangeListener {
+
+class PhoneCallStateListener extends PhoneStateListener {
     private CallbackContext callbackContext;
+    private static int lastState = TelephonyManager.CALL_STATE_IDLE;
+    private static Date callStartTime;
+    private static boolean isIncoming;
+    private static String savedNumber;
 
     public void setCallbackContext(CallbackContext callbackContext) {
         this.callbackContext = callbackContext;
     }
 
-    @Override
-    public void onAudioFocusChange(int focusChange) {
+    public void onCallStateChanged(int state, String number) {
+        if(lastState == state){
+            return;
+        }
+
         String status = "";
-        switch (focusChange) {
-            case AudioManager.AUDIOFOCUS_LOSS:
-                status = "INTERRUPTION_BEGIN";
+
+        switch (state) {
+            case TelephonyManager.CALL_STATE_RINGING:
+                isIncoming = true;
+                callStartTime = new Date();
+                savedNumber = number;
+                status = "INTERRUPTION_BEGIN"; // incoming call
                 break;
-            case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
-                status = "INTERRUPTION_BEGIN";
+            case TelephonyManager.CALL_STATE_OFFHOOK:
+                if (lastState != TelephonyManager.CALL_STATE_RINGING) {
+                    isIncoming = false;
+                    callStartTime = new Date();
+                    status = "INTERRUPTION_BEGIN"; // outgoing call
+                }
                 break;
-            case AudioManager.AUDIOFOCUS_GAIN:
-                status = "INTERRUPTION_ENDED";
+            case TelephonyManager.CALL_STATE_IDLE:
+                if (lastState == TelephonyManager.CALL_STATE_RINGING) {
+                    status = "INTERRUPTION_ENDED"; // missed call
+                } else if (isIncoming) {
+                    status = "INTERRUPTION_ENDED"; // incoming ended
+                } else {
+                    status = "INTERRUPTION_ENDED"; // outgoing ended
+                }
                 break;
         }
 
-        if(status != null && !status.isEmpty()) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, status);
-            result.setKeepCallback(true);
+        lastState = state;
 
-            callbackContext.sendPluginResult(result);
+        if (!status.isEmpty()) {
+            this.sendStateInJS(status);
         }
+    }
+
+    private void sendStateInJS(String status) {
+        if (this.callbackContext == null) return;
+        PluginResult result = new PluginResult(PluginResult.Status.OK, status);
+        result.setKeepCallback(true);
+        this.callbackContext.sendPluginResult(result);
     }
 }

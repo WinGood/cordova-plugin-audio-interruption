@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
+        xmlns:android="http://schemas.android.com/apk/res/android"
         id="cordova-plugin-audio-interruption"
-        version="0.1.1">
+        version="0.1.3">
 
     <name>AudioInterruption</name>
     <description>AudioInterruption plugin</description>
@@ -26,6 +27,10 @@
             <feature name="AudioInterruption">
                 <param name="android-package" value="com.wingood.cordova.audiointerruption.AudioInterruption"/>
             </feature>
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest">
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
         </config-file>
 
         <source-file src="src/android/AudioInterruption.java" target-dir="src/com/wingood/cordova/audiointerruption/"/>
